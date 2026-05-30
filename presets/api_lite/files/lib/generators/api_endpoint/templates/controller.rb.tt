@@ -1,0 +1,38 @@
+<% namespace_parts = class_path.map(&:camelize) -%>
+module Api
+  module V1
+<% namespace_parts.each do |namespace_part| -%>
+    module <%= namespace_part %>
+<% end -%>
+      class <%= file_name.camelize %>Controller < Api::BaseController
+        def create
+          contract = <%= class_name %>::Contracts::CreateContract.new
+          result = contract.call(resource_params.to_h)
+
+          raise Shared::Errors::ValidationError.new(details: result.errors.to_h) if result.failure?
+
+          resource = <%= class_name %>::UseCases::ProcessRequest.new.call(attributes: result.to_h)
+
+          render_success(
+            data: <%= class_name %>::Serializers::<%= file_name.singularize.camelize %>Serializer.render(resource),
+            status: :created
+          )
+        end
+
+<% actions.each do |action| %>
+        def <%= action %>
+          head :not_implemented
+        end
+
+<% end %>
+        private
+
+        def resource_params
+          params.require(:<%= file_name.singularize %>).permit!
+        end
+      end
+<% namespace_parts.size.times do -%>
+    end
+<% end -%>
+  end
+end

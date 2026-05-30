@@ -1,0 +1,2 @@
+<%= form_with model: @<%= singular_table_name %> do |form| %>
+<% end %>

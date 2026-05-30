@@ -1,0 +1,2 @@
+<h1>Novo <%= singular_table_name.humanize %></h1>
+<%= render "form" %>

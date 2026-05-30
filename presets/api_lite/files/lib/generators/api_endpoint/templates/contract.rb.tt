@@ -1,0 +1,15 @@
+# frozen_string_literal: true
+
+<% namespace_parts = class_path + [file_name.camelize] -%>
+<% namespace_parts.each do |namespace_part| -%>
+module <%= namespace_part %>
+<% end -%>
+module Contracts
+  class CreateContract < Shared::Contracts::ApplicationContract
+    params do
+    end
+  end
+end
+<% namespace_parts.size.times do -%>
+end
+<% end -%>

@@ -1,0 +1,1 @@
+<h1><%= plural_table_name.humanize %></h1>

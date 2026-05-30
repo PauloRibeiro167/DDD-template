@@ -1,0 +1,5 @@
+class Create<%= class_name.singularize %>
+  def call(attributes = {})
+    attributes
+  end
+end

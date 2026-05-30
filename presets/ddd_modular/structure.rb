@@ -1,0 +1,71 @@
+# frozen_string_literal: true
+
+apply "shared/template_helpers.rb"
+
+remove_default_rails_layers(
+  "app/models",
+  "app/controllers",
+  "app/helpers",
+  "app/mailers"
+)
+
+create_directory_tree(
+  [
+    "app/domains",
+    "app/domains/identity/models",
+    "app/domains/identity/services",
+    "app/domains/identity/repositories",
+    "app/domains/identity/events",
+    "app/domains/iam/users/models",
+    "app/domains/iam/users/services",
+    "app/domains/iam/users/repositories",
+    "app/domains/iam/users/events",
+    "app/domains/iam/profiles/models",
+    "app/domains/iam/profiles/services",
+    "app/domains/iam/profiles/repositories",
+    "app/domains/iam/profiles/events",
+    "app/domains/iam/permissions/models",
+    "app/domains/iam/permissions/services",
+    "app/domains/iam/permissions/repositories",
+    "app/domains/iam/permissions/events",
+    "app/infrastructure/database/migrations",
+    "app/infrastructure/database/models",
+    "app/interfaces/http/controllers",
+    "app/interfaces/http/controllers/iam/users",
+    "app/interfaces/http/controllers/iam/profiles",
+    "app/interfaces/http/controllers/iam/permissions",
+    "app/interfaces/http/views",
+    "app/interfaces/http/views/iam/users",
+    "app/interfaces/http/views/iam/profiles",
+    "app/interfaces/http/views/iam/permissions",
+    "app/shared"
+  ]
+)
+
+create_keep_files(
+  [
+    "app/domains/identity/models/.keep",
+    "app/infrastructure/database/migrations/.keep",
+    "app/infrastructure/database/models/.keep",
+    "app/interfaces/http/controllers/.keep",
+    "app/interfaces/http/views/.keep",
+    "app/domains/iam/users/models/.keep",
+    "app/domains/iam/users/services/.keep",
+    "app/domains/iam/users/repositories/.keep",
+    "app/domains/iam/users/events/.keep",
+    "app/domains/iam/profiles/models/.keep",
+    "app/domains/iam/profiles/services/.keep",
+    "app/domains/iam/profiles/repositories/.keep",
+    "app/domains/iam/profiles/events/.keep",
+    "app/domains/iam/permissions/models/.keep",
+    "app/domains/iam/permissions/services/.keep",
+    "app/domains/iam/permissions/repositories/.keep",
+    "app/domains/iam/permissions/events/.keep",
+    "app/interfaces/http/controllers/iam/users/.keep",
+    "app/interfaces/http/controllers/iam/profiles/.keep",
+    "app/interfaces/http/controllers/iam/permissions/.keep",
+    "app/interfaces/http/views/iam/users/.keep",
+    "app/interfaces/http/views/iam/profiles/.keep",
+    "app/interfaces/http/views/iam/permissions/.keep"
+  ]
+)
