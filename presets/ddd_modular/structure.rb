@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-apply "shared/template_helpers.rb"
-
 remove_default_rails_layers(
   "app/models",
   "app/controllers",

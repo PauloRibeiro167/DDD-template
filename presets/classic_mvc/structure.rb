@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-apply "shared/template_helpers.rb"
-
 create_directory_tree(
   [
     "app/services",
