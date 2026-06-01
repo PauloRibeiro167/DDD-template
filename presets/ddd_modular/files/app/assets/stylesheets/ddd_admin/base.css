@@ -1,0 +1,26 @@
+body.ddd-admin {
+  background: linear-gradient(180deg, var(--color-surface-50) 0%, var(--color-surface-300) 100%);
+  color: var(--color-text-900);
+}
+
+.ddd-admin * {
+  box-sizing: border-box;
+}
+
+.ddd-admin a {
+  color: var(--color-brand-900);
+}
+
+.ddd-admin .eyebrow {
+  margin: 0 0 var(--space-2);
+  color: var(--color-accent-700);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.ddd-admin .subtitle,
+.ddd-admin .muted-text,
+.ddd-admin .empty-state {
+  color: var(--color-text-700);
+}

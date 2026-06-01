@@ -1,0 +1,130 @@
+.ddd-admin .surface-card,
+.ddd-admin .empty-panel,
+.ddd-admin .sidebar-shell,
+.ddd-admin .navbar-shell {
+  background: linear-gradient(180deg, var(--color-surface-50) 0%, var(--color-surface-100) 100%);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+}
+
+.ddd-admin .surface-card,
+.ddd-admin .empty-panel,
+.ddd-admin .navbar-shell,
+.ddd-admin .sidebar-shell {
+  padding: var(--space-6);
+}
+
+.ddd-admin .button-primary,
+.ddd-admin .button-secondary,
+.ddd-admin .button-danger,
+.ddd-admin .button-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border-radius: var(--radius-pill);
+  padding: var(--space-3) 18px;
+  text-decoration: none;
+  font-weight: var(--font-weight-semibold);
+  border: 0;
+  cursor: pointer;
+}
+
+.ddd-admin .button-primary {
+  background: var(--color-brand-900);
+  color: var(--color-white);
+}
+
+.ddd-admin .button-secondary {
+  background: var(--color-accent-100);
+  color: var(--color-text-900);
+}
+
+.ddd-admin .button-danger {
+  background: var(--color-danger-700);
+  color: var(--color-white);
+}
+
+.ddd-admin .button-link {
+  background: transparent;
+  color: var(--color-brand-900);
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.ddd-admin .button-link.danger {
+  color: var(--color-danger-700);
+}
+
+.ddd-admin .data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ddd-admin .data-table th,
+.ddd-admin .data-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid var(--color-surface-200);
+  text-align: left;
+  vertical-align: top;
+}
+
+.ddd-admin .stacked-form {
+  display: grid;
+  gap: 18px;
+}
+
+.ddd-admin .field {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.ddd-admin .field-checkbox {
+  padding-top: var(--space-2);
+}
+
+.ddd-admin .input,
+.ddd-admin textarea,
+.ddd-admin select {
+  width: 100%;
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  background: var(--color-surface-0);
+}
+
+.ddd-admin textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.ddd-admin .error-box {
+  border: 1px solid var(--color-danger-border);
+  background: var(--color-danger-100);
+  color: var(--color-danger-700);
+  border-radius: var(--radius-sm);
+  padding: var(--space-4);
+}
+
+.ddd-admin .error-box h2 {
+  margin: 0 0 var(--space-2);
+  font-size: 16px;
+}
+
+.ddd-admin .actions,
+.ddd-admin .form-actions,
+.ddd-admin .header-actions,
+.ddd-admin .navbar-actions {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.ddd-admin .stats-grid,
+.ddd-admin .details-grid,
+.ddd-admin .card-grid {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}

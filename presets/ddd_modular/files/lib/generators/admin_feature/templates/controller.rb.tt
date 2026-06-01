@@ -1,0 +1,66 @@
+<% if controller_module_names.any? -%>
+<%= controller_module_opening %>
+<% end -%>
+  class <%= controller_class_name %> < ApplicationController
+    before_action :set_resource, only: %i[show edit update destroy]
+
+    def index
+      @resources = repository.all.map { |resource| <%= ([*domain_module_names, presenter_class_name].join("::")) %>.new(resource) }
+    end
+
+    def show
+      @resource_presenter = <%= ([*domain_module_names, presenter_class_name].join("::")) %>.new(@resource)
+    end
+
+    def new
+      @form = <%= ([*domain_module_names, form_class_name].join("::")) %>.new
+    end
+
+    def create
+      @form = <%= ([*domain_module_names, form_class_name].join("::")) %>.new(resource_params)
+
+      if @form.valid?
+        resource = <%= ([*domain_module_names, "Services", "Create#{file_name.camelize}"].join("::")) %>.new.call(attributes: @form.to_h)
+        redirect_to public_send("<%= route_helper_prefix %>_path", resource.id), notice: "<%= file_name.humanize %> criado com sucesso."
+      else
+        render :new, status: :unprocessable_entity
+      end
+    end
+
+    def edit
+      @form = <%= ([*domain_module_names, form_class_name].join("::")) %>.from_resource(@resource)
+    end
+
+    def update
+      @form = <%= ([*domain_module_names, form_class_name].join("::")) %>.new(resource_params)
+
+      if @form.valid?
+        resource = <%= ([*domain_module_names, "Services", "Update#{file_name.camelize}"].join("::")) %>.new.call(id: params[:id], attributes: @form.to_h)
+        redirect_to public_send("<%= route_helper_prefix %>_path", resource.id), notice: "<%= file_name.humanize %> atualizado com sucesso."
+      else
+        render :edit, status: :unprocessable_entity
+      end
+    end
+
+    def destroy
+      <%= ([*domain_module_names, "Services", "Destroy#{file_name.camelize}"].join("::")) %>.new.call(id: params[:id])
+      redirect_to public_send("<%= plural_route_helper %>_path"), notice: "<%= file_name.humanize %> removido com sucesso."
+    end
+
+    private
+
+    def set_resource
+      @resource = repository.find(params[:id])
+    end
+
+    def repository
+      @repository ||= <%= ([*domain_module_names, "Repositories", "#{file_name.camelize}Repository"].join("::")) %>.new
+    end
+
+    def resource_params
+      params.fetch(:<%= file_name %>, {}).permit(<%= form_fields.map { |attribute| ":#{attribute.name}" }.join(", ") %>)
+    end
+  end
+<% if controller_module_names.any? -%>
+<%= controller_module_closing %>
+<% end -%>

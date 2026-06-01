@@ -1,0 +1,25 @@
+<section class="<%= ui_class(:page_shell) %>">
+  <header class="<%= ui_class(:page_header) %>">
+    <div>
+      <p class="<%= ui_class(:eyebrow) %>">Detalhe</p>
+      <h1><%= generated_erb("@resource_presenter.title") %></h1>
+    </div>
+    <div class="<%= ui_class(:header_actions) %>">
+      <%= generated_erb(%(link_to "Editar", #{edit_member_path_call("@resource_presenter.id")}, class: "#{ui_class(:button_primary)}")) %>
+      <%= generated_erb(%(link_to "Voltar", #{plural_path_call}, class: "#{ui_class(:button_secondary)}")) %>
+    </div>
+  </header>
+
+  <div class="<%= "#{ui_class(:surface_card)} #{ui_class(:details_grid)}" %>">
+    <div>
+      <strong>ID</strong>
+      <p><%= generated_erb("@resource_presenter.id") %></p>
+    </div>
+<% table_headers.each do |header| -%>
+    <div>
+      <strong><%= header.humanize %></strong>
+      <p><%= generated_erb("@resource_presenter.#{header}") %></p>
+    </div>
+<% end -%>
+  </div>
+</section>

@@ -1,0 +1,40 @@
+<%= domain_module_opening %>
+  module Repositories
+    class <%= file_name.camelize %>Repository
+      def all
+        model_class.order(created_at: :desc).map { |record| build_entity(record) }
+      end
+
+      def find(id)
+        build_entity(model_class.find(id))
+      end
+
+      def create(attributes)
+        record = model_class.create!(attributes)
+        build_entity(record)
+      end
+
+      def update(id, attributes)
+        record = model_class.find(id)
+        record.update!(attributes)
+        build_entity(record)
+      end
+
+      def destroy(id)
+        model_class.find(id).destroy!
+      end
+
+      private
+
+      def model_class
+        <%= ([*controller_module_names, model_class_name].join("::")).presence || model_class_name %>
+      end
+
+      def build_entity(record)
+        Models::<%= file_name.camelize %>.new(
+<%= record_attribute_hash_lines(source: "record") %>
+        )
+      end
+    end
+  end
+<%= domain_module_closing %>

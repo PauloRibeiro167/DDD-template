@@ -1,0 +1,13 @@
+<section class="<%= ui_class(:page_shell_md) %>">
+  <header class="<%= ui_class(:page_header) %>">
+    <div>
+      <p class="<%= ui_class(:eyebrow) %>">Cadastro</p>
+      <h1>Novo <%= file_name.humanize %></h1>
+    </div>
+    <%= generated_erb(%(link_to "Voltar", #{plural_path_call}, class: "#{ui_class(:button_secondary)}")) %>
+  </header>
+
+  <div class="<%= ui_class(:surface_card) %>">
+    <%= generated_erb(%(render "form", form: @form, submit_label: "Criar registro", form_url: #{plural_path_call}, form_method: :post)) %>
+  </div>
+</section>

@@ -1,0 +1,9 @@
+<% if class_path.any? -%>
+<%= controller_module_opening %>
+<% end -%>
+  class <%= model_class_name %> < ApplicationRecord
+    self.table_name = "<%= table_name %>"
+  end
+<% if class_path.any? -%>
+<%= controller_module_closing %>
+<% end -%>

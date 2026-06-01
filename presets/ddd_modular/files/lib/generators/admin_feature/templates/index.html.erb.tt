@@ -1,0 +1,46 @@
+<section class="<%= ui_class(:page_shell) %>">
+  <header class="<%= ui_class(:page_header) %>">
+    <div>
+      <p class="<%= ui_class(:eyebrow) %>">Backoffice</p>
+      <h1><%= table_name.humanize %></h1>
+      <p class="<%= ui_class(:subtitle) %>">Fluxo gerado no padrão DDD modular com controller fino, services e views isoladas.</p>
+    </div>
+    <%= generated_erb(%(link_to "Novo registro", #{new_member_path_call}, class: "#{ui_class(:button_primary)}")) %>
+  </header>
+
+  <%= generated_block("if @resources.any?") %>
+    <div class="<%= ui_class(:surface_card) %>">
+      <table class="<%= ui_class(:data_table) %>">
+        <thead>
+          <tr>
+            <th>ID</th>
+<% table_headers.each do |header| -%>
+            <th><%= header.humanize %></th>
+<% end -%>
+            <th>Acoes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= generated_block("@resources.each do |resource|") %>
+            <tr>
+              <td><%= generated_erb("resource.id") %></td>
+<% table_headers.each do |header| -%>
+              <td><%= generated_erb("resource.#{header}") %></td>
+<% end -%>
+              <td class="<%= ui_class(:actions) %>">
+                <%= generated_erb(%(link_to "Ver", #{member_path_call("resource.id")}, class: "#{ui_class(:button_link)}")) %>
+                <%= generated_erb(%(link_to "Editar", #{edit_member_path_call("resource.id")}, class: "#{ui_class(:button_link)}")) %>
+                <%= generated_erb(%(button_to "Excluir", #{member_path_call("resource.id")}, method: :delete, form: { data: { turbo_confirm: "Deseja remover este registro?" } }, class: "#{ui_class(:button_link_danger)}")) %>
+              </td>
+            </tr>
+          <%= generated_block("end") %>
+        </tbody>
+      </table>
+    </div>
+  <%= generated_block("else") %>
+    <div class="<%= ui_class(:empty_panel) %>">
+      <h2>Nenhum registro encontrado</h2>
+      <p class="<%= ui_class(:subtitle) %>">Essa tela ja esta pronta para crescer com filtros, cards e novas jornadas sem misturar regra de negocio na view.</p>
+    </div>
+  <%= generated_block("end") %>
+</section>

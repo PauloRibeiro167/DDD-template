@@ -1,0 +1,29 @@
+<%= domain_module_opening %>
+  class <%= presenter_class_name %>
+    def initialize(resource)
+      @resource = resource
+    end
+
+    def id
+      resource.id
+    end
+
+<% entity_keywords.each do |name| next if name == "id" -%>
+    def <%= name %>
+      resource.<%= name %>
+    end
+
+<% end -%>
+    def title
+<% if form_fields.first -%>
+      resource.<%= form_fields.first.name %>.presence || "Sem titulo"
+<% else -%>
+      "<%= file_name.humanize %> ##{resource.id}"
+<% end -%>
+    end
+
+    private
+
+    attr_reader :resource
+  end
+<%= domain_module_closing %>

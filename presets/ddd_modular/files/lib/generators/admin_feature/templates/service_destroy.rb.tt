@@ -1,0 +1,17 @@
+<%= domain_module_opening %>
+  module Services
+    class Destroy<%= file_name.camelize %>
+      def initialize(repository: Repositories::<%= file_name.camelize %>Repository.new)
+        @repository = repository
+      end
+
+      def call(id:)
+        repository.destroy(id)
+      end
+
+      private
+
+      attr_reader :repository
+    end
+  end
+<%= domain_module_closing %>
