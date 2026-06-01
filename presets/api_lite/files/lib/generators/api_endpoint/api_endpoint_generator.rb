@@ -6,7 +6,7 @@ class ApiEndpointGenerator < Rails::Generators::NamedBase
   argument :actions, type: :array, default: [], banner: "action action"
 
   def create_controller
-    template "controller.rb.tt", "app/interfaces/http/controllers/api/v1/#{file_path}_controller.rb"
+    template "controller.rb.tt", "app/interfaces/http/api/v1/#{file_path}/#{file_name}_controller.rb"
   end
 
   def create_contract
@@ -18,6 +18,6 @@ class ApiEndpointGenerator < Rails::Generators::NamedBase
   end
 
   def create_serializer
-    template "serializer.rb.tt", "app/domains/#{file_path}/serializers/#{file_name.singularize}_serializer.rb"
+    template "serializer.rb.tt", "app/interfaces/http/api/v1/#{file_path}/serializers/#{file_name.singularize}_serializer.rb"
   end
 end

@@ -1,9 +1,11 @@
-<% namespace_parts = class_path + [file_name.camelize] -%>
+<% namespace_parts = class_path.map(&:camelize) -%>
+module Api
+  module V1
 <% namespace_parts.each do |namespace_part| -%>
-module <%= namespace_part %>
+    module <%= namespace_part %>
 <% end -%>
-module Serializers
-  class <%= file_name.singularize.camelize %>Serializer
+    module Serializers
+      class <%= file_name.singularize.camelize %>Serializer
     def self.render(resource)
       {
         type: "<%= file_name.pluralize %>",
@@ -12,6 +14,6 @@ module Serializers
     end
   end
 end
-<% namespace_parts.size.times do -%>
-end
+<% (namespace_parts.size + 2).times do -%>
+    end
 <% end -%>

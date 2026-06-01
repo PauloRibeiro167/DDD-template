@@ -14,7 +14,7 @@ module Api
           resource = <%= class_name %>::UseCases::ProcessRequest.new.call(attributes: result.to_h)
 
           render_success(
-            data: <%= class_name %>::Serializers::<%= file_name.singularize.camelize %>Serializer.render(resource),
+            data: Api::V1<% namespace_parts.each do |namespace_part| %>::<%= namespace_part %><% end %>::Serializers::<%= file_name.singularize.camelize %>Serializer.render(resource),
             status: :created
           )
         end
