@@ -9,8 +9,7 @@ copy_template_files(
     "presets/api_lite/files/app/domains/shared/errors/not_found_error.rb" => "app/domains/shared/errors/not_found_error.rb",
     "presets/api_lite/files/app/domains/shared/errors/unauthorized_error.rb" => "app/domains/shared/errors/unauthorized_error.rb",
     "presets/api_lite/files/app/domains/shared/errors/validation_error.rb" => "app/domains/shared/errors/validation_error.rb",
-    "presets/api_lite/files/app/interfaces/http/controllers/api/base_controller.rb" => "app/interfaces/http/controllers/api/base_controller.rb",
-    "presets/api_lite/files/app/interfaces/http/serializers/error_serializer.rb" => "app/interfaces/http/serializers/error_serializer.rb",
-    "presets/api_lite/files/config/routes.rb" => "config/routes.rb"
+    "presets/api_lite/files/app/interfaces/http/api/base_controller.rb" => "app/interfaces/http/api/base_controller.rb",
+    "presets/api_lite/files/app/interfaces/http/api/error_serializer.rb" => "app/interfaces/http/api/error_serializer.rb"
   }
 )
