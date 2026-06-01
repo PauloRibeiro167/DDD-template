@@ -39,7 +39,12 @@ def copy_template_files(file_mappings)
   end
 end
 
-say "Iniciando o template: Classic MVC", :green
+apply_template "shared/template_options.rb"
+ensure_template_options!(default_preset: "mvc")
+
+say "Iniciando o template: #{selected_template_label}", :green
+puts "[template] preset=mvc"
+puts "[template] with_user_auth=#{@include_user_setup}"
 
 apply_template "shared/base_gems.rb"
 apply_template "shared/i18n_setup.rb"
