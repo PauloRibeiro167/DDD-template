@@ -39,18 +39,66 @@ def copy_template_files(file_mappings)
   end
 end
 
-say "Iniciando o template: API Lite", :green
+def remove_gem_declaration(gem_name)
+  return unless File.exist?("Gemfile")
+
+  gsub_file "Gemfile", /^\s*gem ["']#{Regexp.escape(gem_name)}["'].*\n/, ""
+end
+
+apply_template "shared/template_options.rb"
+ensure_template_options!(default_preset: "api")
+
+say "Iniciando o template: #{selected_template_label}", :green
+puts "[template] preset=api"
+puts "[template] with_user_auth=#{@include_user_setup}"
 
 apply_template "shared/base_gems.rb"
 apply_template "shared/i18n_setup.rb"
 apply_template "shared/template_helpers.rb"
+
+%w[
+  propshaft
+  importmap-rails
+  turbo-rails
+  stimulus-rails
+  jbuilder
+  devise
+  devise-jwt
+  rolify
+  simple_form
+  kaminari
+  discard
+  pundit
+].each do |gem_name|
+  remove_gem_declaration(gem_name)
+end
+
+remove_file "config/initializers/assets.rb" if File.exist?("config/initializers/assets.rb")
+remove_file "config/initializers/content_security_policy.rb" if File.exist?("config/initializers/content_security_policy.rb")
+
+gsub_file "config/application.rb", /^(\s*)config\.api_only = .*$/, ""
+inject_into_file "config/application.rb", after: "config.generators.system_tests = nil\n" do
+  <<~RUBY
+        config.api_only = true
+  RUBY
+end unless File.read("config/application.rb").include?("config.api_only = true")
+
+%w[
+  config/environments/development.rb
+  config/environments/test.rb
+  config/environments/production.rb
+].each do |environment_file|
+  next unless File.exist?(environment_file)
+
+  gsub_file environment_file, /^\s*config\.assets\..*\n/, ""
+  gsub_file environment_file, /^\s*config\.action_view\..*\n/, ""
+end
+
 apply_template "presets/api_lite/api_gems.rb"
-apply_template "presets/api_lite/structure.rb"
-apply_template "presets/api_lite/foundation.rb"
 apply_template "presets/api_lite/libs.rb"
-apply_template "presets/api_lite/zeitwerk.rb"
 
 after_bundle do
   apply_template "shared/rspec_setup.rb"
   apply_template "shared/post_install.rb"
+  apply_template "presets/api_lite/finalize.rb"
 end
