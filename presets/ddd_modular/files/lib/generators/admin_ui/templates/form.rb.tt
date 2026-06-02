@@ -1,0 +1,25 @@
+<% if controller_module_names.any? -%>
+<%= controller_module_opening %>
+<% end -%>
+  class <%= form_class_name %>
+    include ActiveModel::Model
+
+<% if form_accessor_names.empty? -%>
+    # Adicione campos ao gerar a feature para que o form seja preenchido automaticamente.
+<% else -%>
+    attr_accessor <%= form_accessor_names %>
+<% end -%>
+
+    def self.from_resource(resource)
+      new(
+<%= form_resource_hash_lines %>
+      )
+    end
+
+    def to_h
+<%= form_attribute_hash_lines %>
+    end
+  end
+<% if controller_module_names.any? -%>
+<%= controller_module_closing %>
+<% end -%>
