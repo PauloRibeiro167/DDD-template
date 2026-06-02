@@ -1,0 +1,15 @@
+<%= package_namespace_opening("Application", "UseCases") %>
+  class Destroy<%= file_name.camelize %>
+    def initialize(repository: <%= domain_repository_namespace %>.new)
+      @repository = repository
+    end
+
+    def call(id:)
+      repository.destroy(id)
+    end
+
+    private
+
+    attr_reader :repository
+  end
+<%= package_namespace_closing("Application", "UseCases") %>
