@@ -29,6 +29,11 @@ def colorize(text, color = :default)
   "\e[#{colors.fetch(color, 39)}m#{text}#{reset}"
 end
 
+# Invert (reverse video) — useful to highlight a full line without affecting width
+def invert(text)
+  "\e[7m#{text}#{reset}"
+end
+
 # Convenience wrappers that call the template `say` method when available.
 def say_info(text)
   say colorize(text, :cyan)
