@@ -1,0 +1,5 @@
+<%= package_namespace_opening("Infrastructure", "ActiveRecord", "Models") %>
+  class <%= model_class_name %> < ApplicationRecord
+    self.table_name = "<%= table_name %>"
+  end
+<%= package_namespace_closing("Infrastructure", "ActiveRecord", "Models") %>
