@@ -1,2 +1,4 @@
-class <%= class_name.singularize %>
-end
+<%= package_namespace_opening("Domain", "Entities") %>
+	class <%= file_name.camelize %>
+	end
+<%= package_namespace_closing("Domain", "Entities") %>
