@@ -1,2 +1,4 @@
-class <%= class_name.singularize %>Repository
-end
+<%= package_namespace_opening("Domain", "Repositories") %>
+	class <%= file_name.camelize %>Repository
+	end
+<%= package_namespace_closing("Domain", "Repositories") %>
