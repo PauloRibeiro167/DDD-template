@@ -1,0 +1,9 @@
+class Create<%= table_name.camelize %> < ActiveRecord::Migration[8.0]
+  def change
+    create_table :<%= table_name %> do |t|
+<%= model_attribute_lines %>
+
+      t.timestamps
+    end
+  end
+end
