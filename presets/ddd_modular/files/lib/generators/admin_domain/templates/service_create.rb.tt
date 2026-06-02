@@ -1,0 +1,15 @@
+<%= package_namespace_opening("Application", "UseCases") %>
+  class Create<%= file_name.camelize %>
+    def initialize(repository: <%= domain_repository_namespace %>.new)
+      @repository = repository
+    end
+
+    def call(attributes:)
+      repository.create(attributes)
+    end
+
+    private
+
+    attr_reader :repository
+  end
+<%= package_namespace_closing("Application", "UseCases") %>
