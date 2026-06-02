@@ -4,9 +4,9 @@ require "io/console"
 
 unless defined?(TEMPLATE_PRESET_LABELS)
   TEMPLATE_PRESET_LABELS = {
-    "api" => "API Lite",
-    "ddd" => "DDD Modular Monolith",
-    "mvc" => "Classic MVC"
+    "api" => "API simples",
+    "ddd" => "DDD Modular Monolito",
+    "mvc" => "MVC classico"
   }.freeze
 end
 
@@ -77,6 +77,12 @@ def centered_text(content, width)
   visible.center(width)
 end
 
+def left_pad_for(text)
+  len = strip_ansi(text).length
+  pad = ((terminal_width - len) / 2.0).floor
+  pad < 0 ? 0 : pad
+end
+
 def box_line(content, width)
   inner_width = [width - 2, 1].max
   visible = truncate_text(strip_ansi(content), inner_width).ljust(inner_width)
@@ -114,6 +120,22 @@ end
 def interactive_select(prompt, options, default_index: 0)
   return options[default_index]&.first if options.empty?
 
+  # Prefer tty-prompt when available (robust handling of terminal quirks)
+  begin
+    require "tty-prompt"
+    if STDIN.tty? && STDOUT.tty?
+      tty = TTY::Prompt.new
+      choices = {}
+      options.each do |value, label|
+        choices[strip_ansi(label)] = value
+      end
+      selection = tty.select(strip_ansi(prompt), choices, per_page: [options.length, 10].max)
+      return selection
+    end
+  rescue LoadError
+    # tty-prompt not installed — fall back to built-in selector
+  end
+
   return fallback_select(prompt, options, default_index: default_index) unless STDIN.tty? && STDOUT.tty?
 
   index = [[default_index, 0].max, options.length - 1].min
@@ -121,28 +143,36 @@ def interactive_select(prompt, options, default_index: 0)
   help_text = "↑/↓ mover | Enter confirmar | Esc cancelar"
   menu_width = [prompt.length, max_label_width + 4, help_text.length].max
   menu_width = [menu_width, terminal_width - 6].min.clamp(24, 60)
-  margin = box_margin(menu_width)
+
+  # Build visible lines and compute a single left column so the block aligns vertically
+  visible_options = options.map { |_v, label| truncate_text(strip_ansi(format("%s %s", " ", label)), menu_width) }
+  max_line_len = [visible_options.map(&:length).max || 0, prompt.length, help_text.length].max
+  left_col = [(terminal_width - max_line_len) / 2, 0].max
 
   show_menu = lambda do
     clear_screen
 
-    puts indent_text(centered_text(prompt, menu_width), margin)
-    puts indent_text("", margin)
+    # Imprime o prompt centralizado em relação ao bloco
+    prompt_pad = left_col + ((max_line_len - strip_ansi(prompt).length) / 2.0).floor
+    puts "#{' ' * prompt_pad}#{truncate_text(strip_ansi(prompt), menu_width)}"
+    puts ""
 
     options.each_with_index do |(_value, label), option_index|
       marker = option_index == index ? "▶" : " "
       line = format("%s %s", marker, label)
-      line = centered_text(line, menu_width)
+      visible_line = truncate_text(strip_ansi(line), max_line_len)
 
       if option_index == index
-        puts indent_text(colorize(bold(line), :cyan), margin)
+        # use invert helper to highlight the whole visible line (reverse video)
+        puts "#{' ' * left_col}#{invert(visible_line.ljust(max_line_len))}"
       else
-        puts indent_text(line, margin)
+        puts "#{' ' * left_col}#{visible_line.ljust(max_line_len)}"
       end
     end
 
-    puts indent_text("", margin)
-    puts indent_text(centered_text(help_text, menu_width), margin)
+    puts ""
+    help_pad = left_col + ((max_line_len - help_text.length) / 2.0).floor
+    puts "#{' ' * help_pad}#{help_text}"
   end
 
   STDIN.raw do
