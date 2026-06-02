@@ -1,5 +1,15 @@
-class Create<%= class_name.singularize %>
-  def call(attributes = {})
-    attributes
+<%= package_namespace_opening("Application", "UseCases") %>
+  class Create<%= file_name.camelize %>
+    def initialize(repository: <%= package_namespace("Domain", "Repositories", "#{file_name.camelize}Repository") %>.new)
+      @repository = repository
+    end
+
+    def call(attributes:)
+      repository.create(attributes)
+    end
+
+    private
+
+    attr_reader :repository
   end
-end
+<%= package_namespace_closing("Application", "UseCases") %>
