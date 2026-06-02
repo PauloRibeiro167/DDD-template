@@ -71,4 +71,57 @@ inject_into_file "app/models/user.rb", before: /^end$/ do
   RUBY
 end
 
+if @selected_template_preset.to_s == "ddd"
+  IDENTITY_MODELS_ROOT = "app/domains/identity/infrastructure/active_record/models"
+  SHARED_MODELS_ROOT = "app/domains/shared/infrastructure/active_record/models"
+
+  def relocate_identity_model(file_name)
+    source_path = "app/models/#{file_name}.rb"
+    destination_path = "#{IDENTITY_MODELS_ROOT}/#{file_name}.rb"
+
+    return unless File.exist?(source_path)
+
+    empty_directory IDENTITY_MODELS_ROOT
+    create_file destination_path, File.read(source_path), force: true
+    remove_file source_path
+  end
+  
+  def relocate_shared_model(file_name)
+    source_path = "app/models/#{file_name}.rb"
+    destination_path = "#{SHARED_MODELS_ROOT}/#{file_name}.rb"
+
+    return unless File.exist?(source_path)
+
+    empty_directory SHARED_MODELS_ROOT
+    create_file destination_path, File.read(source_path), force: true
+    remove_file source_path
+  end
+
+  def require_identity_models_in_routes
+    routes_path = "config/routes.rb"
+    return unless File.exist?(routes_path)
+
+    routes_requirements = <<~RUBY
+      require Rails.root.join("app/domains/identity/infrastructure/active_record/models/jwt_denylist")
+      require Rails.root.join("app/domains/identity/infrastructure/active_record/models/role")
+      require Rails.root.join("app/domains/identity/infrastructure/active_record/models/profile")
+      require Rails.root.join("app/domains/identity/infrastructure/active_record/models/user")
+
+    RUBY
+
+    routes_content = File.read(routes_path)
+    return if routes_content.include?('app/domains/identity/infrastructure/active_record/models/user')
+
+    create_file routes_path, "#{routes_requirements}#{routes_content}", force: true
+  end
+
+  %w[user jwt_denylist role profile].each do |model_name|
+    relocate_identity_model(model_name)
+  end
+  
+  relocate_shared_model("application_record")
+
+  require_identity_models_in_routes
+end
+
 say "Autenticação, Perfis e Permissões configurados com sucesso!", :blue
