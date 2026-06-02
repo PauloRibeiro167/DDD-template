@@ -1,80 +1,86 @@
 # frozen_string_literal: true
 
-remove_default_rails_layers(
+directories_to_remove = [
   "app/controllers",
   "app/helpers",
-  "app/mailers"
-)
+  "app/mailers",
+  "app/models/concerns"
+]
 
-create_directory_tree(
-  [
-    "app/domains",
-    "app/domains/shared",
-    "app/domains/authentication",
-    "app/domains/authentication/users",
-    "app/domains/authentication/users/models",
-    "app/domains/authentication/users/services",
-    "app/domains/authentication/users/repositories",
-    "app/domains/authentication/users/events",
-    "app/domains/authentication/profiles",
-    "app/domains/authentication/profiles/models",
-    "app/domains/authentication/profiles/services",
-    "app/domains/authentication/profiles/repositories",
-    "app/domains/authentication/profiles/events",
-    "app/domains/authentication/roles",
-    "app/domains/authentication/roles/models",
-    "app/domains/authentication/roles/services",
-    "app/domains/authentication/roles/repositories",
-    "app/domains/authentication/roles/events",
-    "app/domains/authentication/permissions",
-    "app/domains/authentication/permissions/models",
-    "app/domains/authentication/permissions/services",
-    "app/domains/authentication/permissions/repositories",
-    "app/domains/authentication/permissions/events",
-    "app/models",
-    "app/interfaces/http/controllers",
-    "app/interfaces/http/controllers/authentication",
-    "app/interfaces/http/forms",
-    "app/interfaces/http/forms/authentication",
-    "app/interfaces/http/presenters",
-    "app/interfaces/http/presenters/authentication",
-    "app/interfaces/http/views",
-    "app/interfaces/http/views/authentication",
-    "app/infrastructure",
-    "app/shared"
-  ]
-)
+base_directories = [
+  "app/domains",
+  "app/domains/shared",
+  "app/domains/shared/public",
+  "app/domains/shared/application",
+  "app/domains/shared/application/use_cases",
+  "app/domains/shared/application/event_handlers",
+  "app/domains/shared/domain",
+  "app/domains/shared/domain/entities",
+  "app/domains/shared/domain/value_objects",
+  "app/domains/shared/domain/events",
+  "app/domains/shared/domain/repositories",
+  "app/domains/shared/infrastructure",
+  "app/domains/shared/infrastructure/active_record",
+  "app/domains/shared/infrastructure/active_record/models",
+  "app/domains/shared/infrastructure/repositories",
+  "app/domains/shared/infrastructure/messaging",
+  "app/domains/shared/presentation",
+  "app/domains/shared/presentation/controllers",
+  "app/domains/shared/presentation/serializers",
+  "app/domains/shared/presentation/views",
+  "app/models"
+]
 
-create_keep_files(
-  [
-    "app/domains/.keep",
-    "app/domains/shared/.keep",
-    "app/domains/authentication/.keep",
-    "app/domains/authentication/users/models/.keep",
-    "app/domains/authentication/users/services/.keep",
-    "app/domains/authentication/users/repositories/.keep",
-    "app/domains/authentication/users/events/.keep",
-    "app/domains/authentication/profiles/models/.keep",
-    "app/domains/authentication/profiles/services/.keep",
-    "app/domains/authentication/profiles/repositories/.keep",
-    "app/domains/authentication/profiles/events/.keep",
-    "app/domains/authentication/roles/models/.keep",
-    "app/domains/authentication/roles/services/.keep",
-    "app/domains/authentication/roles/repositories/.keep",
-    "app/domains/authentication/roles/events/.keep",
-    "app/domains/authentication/permissions/models/.keep",
-    "app/domains/authentication/permissions/services/.keep",
-    "app/domains/authentication/permissions/repositories/.keep",
-    "app/domains/authentication/permissions/events/.keep",
-    "app/models/.keep",
-    "app/interfaces/http/controllers/.keep",
-    "app/interfaces/http/controllers/authentication/.keep",
-    "app/interfaces/http/forms/.keep",
-    "app/interfaces/http/forms/authentication/.keep",
-    "app/interfaces/http/presenters/.keep",
-    "app/interfaces/http/presenters/authentication/.keep",
-    "app/interfaces/http/views/.keep",
-    "app/interfaces/http/views/authentication/.keep",
-    "app/infrastructure/.keep"
-  ]
-)
+base_keep_files = base_directories.map { |dir| "#{dir}/.keep" } - ["app/domains/.keep", "app/models/.keep"]
+base_keep_files.concat(["app/domains/.keep", "app/models/.keep"])
+
+identity_directories = [
+  "app/domains/identity",
+  "app/domains/identity/public",
+  "app/domains/identity/application",
+  "app/domains/identity/application/use_cases",
+  "app/domains/identity/application/event_handlers",
+  "app/domains/identity/domain",
+  "app/domains/identity/domain/entities",
+  "app/domains/identity/domain/value_objects",
+  "app/domains/identity/domain/events",
+  "app/domains/identity/domain/repositories",
+  "app/domains/identity/infrastructure",
+  "app/domains/identity/infrastructure/active_record",
+  "app/domains/identity/infrastructure/active_record/models",
+  "app/domains/identity/infrastructure/repositories",
+  "app/domains/identity/infrastructure/messaging",
+  "app/domains/identity/presentation",
+  "app/domains/identity/presentation/controllers",
+  "app/domains/identity/presentation/serializers",
+  "app/domains/identity/presentation/views"
+]
+
+identity_keep_files = identity_directories.map { |dir| "#{dir}/.keep" } - ["app/domains/identity/.keep"]
+identity_keep_files << "app/domains/identity/.keep"
+
+directories = base_directories.dup
+keep_files = base_keep_files.dup
+
+if @include_user_setup
+  directories.concat(identity_directories)
+  keep_files.concat(identity_keep_files)
+end
+
+remove_default_rails_layers(*directories_to_remove)
+create_directory_tree(directories)
+create_keep_files(keep_files)
+
+create_file "app/domains/shared/public/api.rb", "# frozen_string_literal: true\n\nmodule Shared\n  module Public\n    module Api\n    end\n  end\nend\n"
+create_file "app/domains/shared/package.yml", <<~YAML
+  name: shared
+  enforce_privacy: true
+YAML
+
+if @include_user_setup
+  create_file "app/domains/identity/public/api.rb", "# frozen_string_literal: true\n\nmodule Identity\n  module Public\n    module Api\n    end\n  end\nend\n"
+  create_file "app/domains/identity/package.yml", <<~YAML
+    name: identity
+    enforce_privacy: true
+  YAML
+end
