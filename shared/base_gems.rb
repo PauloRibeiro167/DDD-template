@@ -43,6 +43,7 @@ gem "bullet", "~> 8.1", ">= 8.1.2", group: :development unless gem_declared_in_p
 gem "dotenv-rails", "~> 3.2", ">= 3.2.0", group: %i[development test] unless gem_declared_in_project?("dotenv-rails")
 gem "rubocop", "~> 1.86", ">= 1.86.2", require: false, group: :development unless gem_declared_in_project?("rubocop")
 gem "brakeman", "~> 8.0", ">= 8.0.4", require: false, group: :development unless gem_declared_in_project?("brakeman")
+gem "tty-prompt", "~> 0.23", group: :development unless gem_declared_in_project?("tty-prompt")
 
 ### Observações
 # - Versões usadas são as versões estáveis mais recentes consultadas no RubyGems
