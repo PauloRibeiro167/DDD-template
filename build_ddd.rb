@@ -57,4 +57,5 @@ apply_template "presets/ddd_modular/zeitwerk.rb"
 after_bundle do
   apply_template "shared/rspec_setup.rb"
   apply_template "shared/post_install.rb"
+  apply_template "presets/ddd_modular/finalize.rb"
 end
